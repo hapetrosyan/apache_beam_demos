@@ -67,8 +67,10 @@ def run(argv=None, save_main_session=True):
     # csv_lines = (p | ReadFromText(known_args.input, skip_header_lines=1))
     # csv_lines | beam.io.WriteToText(known_args.output)
 
-    p | beam.Create([('a', 11), ('b', 22), ('c', 3333)]) \
-    | beam.io.WriteToText(known_args.output)
+    p | beam.io.ReadFromText('./data_files/UserAssetRoles1.csv', skip_header_lines=1) \
+      | beam.Map(lambda x: x.split(',')) \
+      | beam.Map(lambda x: [x[1], x[3]]) \
+      | beam.io.WriteToText(known_args.output)
 
 
 
